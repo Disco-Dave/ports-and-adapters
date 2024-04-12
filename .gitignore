@@ -1,0 +1,5 @@
+**/*.tix
+**/.stack-work
+**/cabal.project.local
+**/cabal.project.local~*
+**/dist-newstyle

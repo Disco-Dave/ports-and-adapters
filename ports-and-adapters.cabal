@@ -1,0 +1,101 @@
+cabal-version: 3.4
+
+name: ports-and-adapters
+version: 0.1.0.0
+
+
+flag pedantic
+  description: Enables @-Werror@, which turns warnings into errors.
+  default: False
+  manual: True
+
+
+common shared
+  default-language: GHC2021
+
+  default-extensions:
+    AllowAmbiguousTypes
+    DataKinds
+    DerivingVia
+    DuplicateRecordFields
+    GADTs
+    LambdaCase
+    MultiWayIf
+    NoFieldSelectors
+    OverloadedRecordDot
+    OverloadedStrings
+    RecordWildCards
+    StrictData
+    TypeFamilies
+    UndecidableInstances
+
+  ghc-options:
+    -Weverything 
+    -Wno-all-missed-specialisations 
+    -Wno-identities 
+    -Wno-implicit-prelude 
+    -Wno-missed-specialisations 
+    -Wno-missing-deriving-strategies
+    -Wno-missing-import-lists 
+    -Wno-missing-kind-signatures
+    -Wno-missing-local-signatures 
+    -Wno-missing-poly-kind-signatures
+    -Wno-missing-role-annotations
+    -Wno-missing-safe-haskell-mode
+    -Wno-monomorphism-restriction 
+    -Wno-safe 
+    -Wno-unsafe 
+
+    -Werror=incomplete-patterns
+
+  if flag(pedantic)
+    ghc-options:
+      -Werror
+
+  build-depends:
+    , base >=4.7 && <5
+
+
+common shared-exe
+  import:
+    , shared
+
+  build-depends:
+    , ports-and-adapters
+
+  ghc-options:
+    -threaded 
+    -rtsopts 
+    -with-rtsopts=-N
+
+
+library
+  import: shared
+
+  hs-source-dirs: src
+
+  build-depends:
+    , first-class-families ^>= 0.8.1.0
+    , mtl ^>= 2.3.1
+    , vector ^>= 0.13.1.0
+
+  exposed-modules:
+    Ports
+    Ports.Adapters
+
+
+test-suite ports-and-adapters-test
+  import: shared-exe
+
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Main.hs
+
+  build-tool-depends:
+    , hspec-discover:hspec-discover
+
+  build-depends:
+    , hspec ^>= 2.11.7
+
+  other-modules:
+    Spec
