@@ -7,6 +7,7 @@ module Ports.Adapters
   , Combine
   , CanFind
   , empty
+  , singleton
   , push
   , append
   , combine
@@ -97,6 +98,11 @@ newtype Adapters (ports :: [Type])
 empty :: Adapters '[]
 empty =
   Adapters Vector.empty
+
+
+singleton :: port -> Adapters '[port]
+singleton port =
+  Adapters $ Vector.singleton (Adapter port)
 
 
 -- | Bind a 'port' and add it to the beginning of the list.
